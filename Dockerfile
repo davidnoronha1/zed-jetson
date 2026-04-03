@@ -21,6 +21,7 @@ ENV ROS_DISTRO=${ROS_VERSION} \
     NVCC_PATH="/usr/local/cuda/bin/nvcc" \
     VENV_PATH="/opt/venv" \
     PYTHONNOUSERSITE=1
+    WGET_FLAGS="--quiet --show-progress --progress=bar:force:noscroll --no-check-certificate --timeout=60 --tries=3"
 
 SHELL ["/bin/bash", "-c"]
 
