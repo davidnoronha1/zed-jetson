@@ -158,6 +158,7 @@ colcon build \
   -Wno-dev \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_POLICY_DEFAULT_CMP0148=OLD \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DSECURITY=ON
 
 # ── Cleanup ──────────────────────────────────────────────────────────────────
