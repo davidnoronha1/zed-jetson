@@ -18,7 +18,7 @@ print_log "ROS2 $ROS_DISTRO installer ($(uname -m))
 # ── Apt repos & base tools ───────────────────────────────────────────────────
 apt-get update
 apt-get install -y --no-install-recommends \
-  curl wget gnupg2 lsb-release ca-certificates libssl-dev python3-venv
+  curl wget gnupg2 lsb-release ca-certificates libssl-dev python3-venv git git-lfs
 
 curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
   -o /usr/share/keyrings/ros-archive-keyring.gpg
