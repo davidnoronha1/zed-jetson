@@ -45,37 +45,6 @@ apt-get install -y --no-install-recommends \
   libasio-dev libtinyxml2-dev libcunit1-dev \
   libacl1-dev libssl-dev libxaw7-dev libfreetype-dev 
 
-apt-get install -y \
-  libopencv-dev \
-  libopencv-contrib-dev \
-  libopencv-aruco-dev \
-  libopencv-stereo-dev \
-  libopencv-structured-light-dev \
-  libopencv-phase-unwrapping-dev \
-  libopencv-optflow-dev \
-  libopencv-surface-matching-dev \
-  libopencv-bgsegm-dev \
-  libopencv-bioinspired-dev \
-  libopencv-ccalib-dev \
-  libopencv-datasets-dev \
-  libopencv-dnn-objdetect-dev \
-  libopencv-face-dev \
-  libopencv-fuzzy-dev \
-  libopencv-hdf-dev \
-  libopencv-hfs-dev \
-  libopencv-img-hash-dev \
-  libopencv-line-descriptor-dev \
-  libopencv-reg-dev \
-  libopencv-rgbd-dev \
-  libopencv-saliency-dev \
-  libopencv-tracking-dev \
-  libopencv-xfeatures2d-dev \
-  libopencv-ximgproc-dev \
-  libopencv-xobjdetect-dev \
-  libopencv-xphoto-dev \
-  python3-opencv \
-  || true
-
 maybe_install "rti-connext-dds-6.0.1"
 
 # ── Create virtualenv ────────────────────────────────────────────────────────
