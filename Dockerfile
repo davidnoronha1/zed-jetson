@@ -4,7 +4,7 @@ ARG L4T_MINOR_VERSION=4
 ARG ROS_DISTRO_ARG=jazzy
 
 # Specify the parent image from which we build
-FROM stereolabs/zed:${ZED_SDK_MAJOR}.${ZED_SDK_MINOR}-devel-l4t-r36.${L4T_MINOR_VERSION} 
+FROM stereolabs/zed:${ZED_SDK_MAJOR}.${ZED_SDK_MINOR}-devel-l4t-r36.4
 
 
 # Setup ROS
