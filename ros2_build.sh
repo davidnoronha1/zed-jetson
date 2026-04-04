@@ -5,6 +5,7 @@ set -euo pipefail
 export CUDA_HOME="/usr/local/cuda"
 export NVCC_PATH="$CUDA_HOME/bin/nvcc"
 SKIP_KEYS=${SKIP_KEYS:-""}
+SKIP_KEYS="$SKIP_KEYS image_proc"
 SEPARATOR="********************************************************"
 
 print_log() { printf "\n$SEPARATOR\n$1\n$SEPARATOR\n\n"; }
