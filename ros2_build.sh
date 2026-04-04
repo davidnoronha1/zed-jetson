@@ -155,7 +155,7 @@ xargs -a rosdeps.txt apt-get install -y --no-install-suggests --no-install-recom
 
 colcon build \
   --merge-install \
-  --packages-skip image_proc image_rotate \
+  --packages-skip image_proc image_rotate depth_image_proc \
   --cmake-args \
   -Wno-dev \
   -DCMAKE_BUILD_TYPE=Release \
