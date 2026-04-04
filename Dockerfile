@@ -49,7 +49,6 @@ FROM ros2_build AS final
 ARG L4T_MAJOR_VERSION=36 \
     L4T_MINOR_VERSION=5 \
     L4T_PATCH_VERSION=0 \
-    # ZED SDK 5.2 for JetPack 6.2.2 / L4T 36.5
     ZED_URL=https://download.stereolabs.com/zedsdk/5.2/l4t36.5/jetsons
 
 ENV LOGNAME=root \
