@@ -27,6 +27,11 @@ ENV ROS_DISTRO=${ROS_VERSION} \
 SHELL ["/bin/bash", "-c"]
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-colcon-common-extensions \
+    libgeographic-dev \
+    nlohmann-json3-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ros2_build.sh rosdeps.yml $TMP/
 RUN $TMP/ros2_build.sh
@@ -78,6 +83,18 @@ RUN mkdir -p /data/zed/resources && \
     mkdir -p /root/.cache/zed/resources && \
     ln -s /data/zed /root/.cache/zed && \
     ln -s /root/.cache/zed/resources /usr/local/zed/resources
+
+
+COPY ros_ws/ /ros_ws/
+
+RUN source /opt/ros/jazzy/install/setup.bash && \
+    cd /ros_ws && \
+    colcon build --continue-on-error
+
+ENV ROS_WS=/ros_ws
+
+RUN echo "source /opt/ros/jazzy/install/setup.bash" >> /etc/bash.bashrc && \
+    echo "source /ros_ws/install/setup.bash" >> /etc/bash.bashrc
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["/bin/bash"]
