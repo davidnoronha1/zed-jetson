@@ -1,0 +1,201 @@
+    1  ls
+    2  ls /usr/local/cuda
+    3  ls
+    4  mkdir -p ~/ros2_ws/src/
+    5  # Move to the `src` folder of the ROS 2 Workspace
+    6  cd ~/ros2_ws/src/ 
+    7  git clone https://github.com/stereolabs/zed-ros2-wrapper.git
+    8  cd ..
+    9  sudo apt update
+   10  rosdep install --from-paths src --ignore-src -r -y
+   11  source /opt/ros/jazzy/setup.bash
+   12  ls
+   13  cd src
+   14  ls
+   15  cd ..
+   16  ls
+   17  cd src/zed-ros2-wrapper/
+   18  ls
+   19  cd ..
+   20  catkin_make
+   21  clear
+   22  colcon
+   23  cd ..
+   24  ls
+   25  cd ..
+   26  ls
+   27  cat ros_entrypoint.sh 
+   28  source /opt/ros/jazzy/install/setup.sh 
+   29  ros2
+   30  cd root
+   31  ls
+   32  cd ros2_ws/
+   33  colcon
+   34  python2
+   35  python3
+   36  python3 -m pip install colcon
+   37  uv
+   38  sudo apt install colcon
+   39  sudo apt install python3-colcon-core
+   40  colcon
+   41  colcon build
+   42  ls
+   43  colcon build --help
+   44  cd src
+   45  ls
+   46  colcon build
+   47  cd zed-ros2-wrapper/
+   48  ls
+   49  colcon build
+   50  cd ..
+   51  ls
+   52  cd ros2_ws/
+   53  ls
+   54  cat install/
+   55  cat install/setup.sh 
+   56  clear
+   57  ls
+   58  colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
+   59  sudo apt remove python3-colon-core
+   60  sudo apt remove python3-colcon-core
+   61  sudo apt install python3-colcon-common-extensions
+   62  colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
+   63  sudo apt search nlohmann
+   64  sudo apt install nlohmann-json3-dev
+   65  colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
+   66  apt search nmea
+   67  clear
+   68  cd ..
+   69  mkdir -p catkin_ws
+   70  cd ~/catkin_ws/src
+   71  git clone https://github.com/stereolabs/zed-ros2-interfaces.git
+   72  cd ../
+   73  sudo apt update
+   74  rosdep update
+   75  rosdep install --from-paths src --ignore-src -r -y
+   76  colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
+   77  echo source $(pwd)/install/local_setup.bash >> ~/.bashrc
+   78  source ~/.bashrc
+   79  clear
+   80  ls
+   81  cd catkin_ws
+   82  ls
+   83  cd ~/catkin_ws/src
+   84  cd ~
+   85  ls
+   86  cd catkin_ws/
+   87  ls
+   88  cd ..
+   89  cd zed-ros2-interfaces/
+   90  ls
+   91  colcon
+   92  colcon build
+   93  cd ..
+   94  git clone https://github.com/ros-drivers/nmea_msgs.git
+   95  cd nmea_msgs/
+   96  ls
+   97  colcon build
+   98  cd ..
+   99  mv nmea_msgs/ zed-ros2-interfaces/ ros2_ws/src/
+  100  ls
+  101  cd ros2_ws/
+  102  ls
+  103  colcon build
+  104  cd src
+  105  git clone https://github.com/ros-geographic-info/geographic_info.git
+  106  cd ..
+  107  colcon build
+  108  cd src/geographic_info/
+  109  git switch jazzy
+  110  cd ..
+  111  cd .
+  112  cd ..
+  113  colcon build
+  114  apt search angles
+  115  sudo apt install libangles-dev
+  116  colcon build
+  117  cd src/geographic_info/
+  118  ls
+  119  rm -rf geodesy/
+  120  cd ..
+  121  colcon build
+  122  cd src/geographic_info/
+  123  git restore .
+  124  cd ..
+  125  apt search diagnostic
+  126  sudo apt install libdiagnostic-updater-dev
+  127  colcon build
+  128  sudo apt install librobot-localization-dev
+  129  apt search rosdep
+  130  sudo apt install python3-rosdep
+  131  rosdep install --from-paths src --ignore-src -r -y
+  132  rosdep update
+  133  rosdep install --from-paths src --ignore-src -r -y
+  134  cd src
+  135  git clone https://github.com/stereolabs/zed-ros2-description.git
+  136  cd ..
+  137  colcon build
+  138  apt search localization
+  139  apt search localization | grep robot
+  140  apt search localization | grep robot -a2
+  141  cd src
+  142  git clone https://github.com/cra-ros-pkg/robot_localization.git
+  143  cd ..
+  144  git clone https://github.com/cra-ros-pkg/robot_localization.git
+  145  colcon build
+  146  sudo apt search geographiclib
+  147  sudo apt search geographic
+  148  sudo apt search geographic | grep -- -dev
+  149  sudo apt install libgeographic-dev
+  150  colcon build
+  151  cd src
+  152  ls
+  153  git clone https://github.com/ros/angles.git
+  154  git clone https://github.com/ros/diagnostics.git
+  155  cd ..
+  156  colcon build
+  157  cd src/diagnostics/
+  158  ls
+  159  cd ..
+  160  colcon build --continue-on-error
+  161  ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+  162  source /opt/ros/jazzy/install/
+  163  source /opt/ros/jazzy/install/setup.bash
+  164  ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+  165  ls
+  166  source install/setup.bash
+  167  ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+  168  cd ..
+  169  ls
+  170  cd src
+  171  ls
+  172  cd ..
+  173  colcon build
+  174  clear
+  175  ls
+  176  cd src
+  177  ls
+  178  cp zed-ros2-wrapper/* .
+  179  cp -r zed-ros2-wrapper/* .
+  180  clear
+  181  ls
+  182  colcon build
+  183  rm -rf zed-ros2-wrapper/
+  184  colcon build
+  185  colcon build --continue-on-error
+  186  exit
+  187  nvidia-smi
+  188  exit
+  189  cd src
+  190  clear
+  191  ls
+  192  exit
+  193  nmtui
+  194  exit
+  195  ros2 topic list
+  196  exit
+  197  ls /usr/local/zed/
+  198  cd /root
+  199  ls
+  200  cd ros2_ws/
+  201  history >> history.log

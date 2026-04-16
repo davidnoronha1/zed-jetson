@@ -1,0 +1,28 @@
+[submodule "src/angles"]
+	path = src/angles
+	url = https://github.com/ros/angles.git
+[submodule "src/backward_ros"]
+	path = src/backward_ros
+	url = https://github.com/pal-robotics/backward_ros.git
+[submodule "src/diagnostics"]
+	path = src/diagnostics
+	url = https://github.com/ros/diagnostics.git
+[submodule "src/zed-ros2-wrapper"]
+	path = src/zed-ros2-wrapper
+	url = https://github.com/stereolabs/zed-ros2-wrapper.git
+[submodule "src/geographic_info"]
+	path = src/geographic_info
+	url = https://github.com/ros-geographic-info/geographic_info.git
+	branch = ros2
+[submodule "src/nmea_msgs"]
+	path = src/nmea_msgs
+	url = https://github.com/ros-drivers/nmea_msgs.git
+[submodule "src/zed-ros2-description"]
+	path = src/zed-ros2-description
+	url = https://github.com/stereolabs/zed-ros2-description.git
+[submodule "src/zed-ros2-interfaces"]
+	path = src/zed-ros2-interfaces
+	url = https://github.com/stereolabs/zed-ros2-interfaces.git
+[submodule "src/xacro"]
+	path = src/xacro
+	url = https://github.com/ros/xacro.git
