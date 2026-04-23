@@ -1,0 +1,33 @@
+# Custom Object Detection configuration for ZED-2i camera
+# Using custom ONNX model: docking.onnx
+
+/**:
+  ros__parameters:
+    object_detection:
+      custom_onnx_file: '/home/ssen4/Projects/zed-jetson/docking.onnx'
+      custom_onnx_input_size: 640
+      custom_class_count: 1
+
+      class_000:
+        label: 'docking_station'
+        model_class_id: 0
+        enabled: true
+        confidence_threshold: 50.0
+        is_grounded: true
+        is_static: true
+        tracking_timeout: -1.0
+        tracking_max_dist: -1.0
+        max_box_width_normalized: -1.0
+        min_box_width_normalized: -1.0
+        max_box_height_normalized: -1.0
+        min_box_height_normalized: -1.0
+        max_box_width_meters: -1.0
+        min_box_width_meters: -1.0
+        max_box_height_meters: -1.0
+        min_box_height_meters: -1.0
+        object_acceleration_preset: 'DEFAULT'
+        max_allowed_acceleration: 100000.0
+        velocity_smoothing_factor: 0.5
+        min_velocity_threshold: 0.2
+        prediction_timeout_s: 0.5
+        min_confirmation_time_s: 0.05
