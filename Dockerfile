@@ -85,11 +85,16 @@ RUN mkdir -p /data/zed/resources && \
     ln -s /root/.cache/zed/resources /usr/local/zed/resources
 
 
-COPY ros_ws/ /ros_ws/
+COPY src/ /ros_ws/src/
 
-RUN source /opt/ros/jazzy/install/setup.bash && \
+RUN apt-get update && \
+    source /opt/ros/jazzy/install/setup.bash && \
     cd /ros_ws && \
-    colcon build --continue-on-error
+    rosdep init || true && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -r -y && \
+    colcon build --continue-on-error --cmake-args -DCMAKE_BUILD_TYPE=Release && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV ROS_WS=/ros_ws
 
