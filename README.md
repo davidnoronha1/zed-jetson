@@ -4,71 +4,130 @@ Docker image for running the [ZED ROS 2 wrapper](https://github.com/stereolabs/z
 on NVIDIA Jetson (JetPack 6.2.2 / L4T 36.5, Orin), with ROS 2 Jazzy built from source and the
 ZED SDK 5.2 layered on top.
 
+## Quick Start
+
+### Using Docker Compose (Recommended)
+
+```bash
+git submodule update --init --recursive
+
+# Pull pre-built image from ghcr.io (falls back to local build if unavailable)
+docker-compose -f docker/docker-compose.yml up -it
+
+# Or force a local build
+docker-compose -f docker/docker-compose.yml up --build -it
+
+# Use a specific image tag
+IMAGE_TAG=master docker-compose -f docker/docker-compose.yml up -it
+```
+
+Once in the container:
+
+```bash
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+```
+
+### Using Docker CLI
+
+```bash
+docker run --runtime nvidia -it --network host --privileged \
+  -v /dev:/dev \
+  ghcr.io/davidnoronha1/zed-jetson:latest \
+  ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+```
+
 ## Why build ROS 2 from source
 
 There is no official ROS 2 Jazzy apt distribution for L4T/Jetson, so the image builds it from
 source against the L4T JetPack base image (`nvcr.io/nvidia/l4t-jetpack:r36.4.0`). The ZED SDK is
 then installed in a second stage on top of that ROS 2 layer.
 
-## Layout
+## Project Layout
 
-- `Dockerfile` — two-stage build: `ros2_build` (ROS 2 Jazzy from source) → `final` (+ ZED SDK,
-  workspace build).
-- `ros2_build.sh` — builds ROS 2 Jazzy (`ros_base`) from source via `rosinstall_generator` +
-  `vcs` + `colcon`. Runs once during the image build.
-- `rosdeps.yml` — extra rosdep keys not covered by the upstream rosdistro index.
-- `ros_environment.sh` / `ros_entrypoint.sh` — sourced at container start to bring the ROS 2
-  install and workspace overlay onto `PATH`/`AMENT_PREFIX_PATH`.
-- `ros2_install.sh` — standalone helper for pulling in and building extra ROS 2 packages
-  (from rosdistro or a git URL) inside a running container or a derived image, without needing
-  the full `ros2_build.sh` bootstrap.
-- `src/` — git submodules for the ROS 2 workspace built into `/ros_ws` in the final image
-  (ZED wrapper/interfaces/description, plus supporting packages: `angles`, `backward_ros`,
-  `diagnostics`, `geographic_info`, `nmea_msgs`, `xacro`).
-- `config/` — project-local override configs (not part of any submodule), e.g. custom object
-  detection models/classes. Copied into the `zed_debug` package config at runtime by
-  `object_detection_launch.sh`.
-
-## Object detection demo
-
-`object_detection_launch.sh` copies `config/common_stereo.yaml` and
-`config/custom_object_detection_docking.yaml` into `src/zed-ros2-wrapper/zed_debug/config/`
-(rewriting the ONNX model path to the current checkout), enables the object detection service,
-and launches `zed_debug`'s debug camera launch file with the custom ONNX model (`docking.onnx`)
-configured. Requires a `colcon build` (or rebuild) of the workspace afterward to pick up the
-copied config, since the image is built without `--symlink-install`.
+```
+.
+├── docker/                    # Docker configuration
+│   ├── Dockerfile            # Two-stage build: ROS 2 → ZED SDK + workspace
+│   ├── docker-compose.yml    # Compose config with ghcr fallback
+│   ├── ros2_build.sh         # Bootstrap script for ROS 2 from source
+│   ├── ros2_install.sh       # Helper for adding packages to workspace
+│   ├── rosdeps.yml           # Custom rosdep keys
+│   ├── ros_entrypoint.sh     # Container entry point
+│   └── ros_environment.sh    # ROS environment setup
+├── src/                      # ROS 2 workspace (git submodules)
+│   ├── zed-ros2-wrapper/     # ZED camera wrapper and debugging tools
+│   └── [other packages]      # Supporting packages: angles, diagnostics, etc.
+├── scripts/                  # Utility scripts
+│   └── object_detection_launch.sh  # Launch ZED debug with custom ONNX model
+├── config/                   # Configuration files
+│   ├── common_stereo.yaml
+│   └── custom_object_detection_docking.yaml
+├── docking.onnx             # Custom object detection model
+└── README.md
+```
 
 ## Building
 
-Submodules must be checked out before building, since the workspace sources are copied straight
-from `src/` into the image:
+Submodules must be checked out before building:
 
 ```bash
 git submodule update --init --recursive
-docker build -t zed-jetson .
 ```
 
-The image must be built `linux/arm64` on a Jetson (or an arm64 builder) — the base image is
-Jetson-specific and the ZED SDK download is fetched for L4T 36.5. CI (`.github/workflows/build-push.yaml`)
-does this on `ubuntu-24.04-arm` runners.
-
-Build args (see `Dockerfile` for defaults): `ROS_PACKAGE`, `ROS_VERSION`, `L4T_MAJOR_VERSION`,
-`L4T_MINOR_VERSION`, `L4T_PATCH_VERSION`, `ZED_URL`.
-
-## Running
+### Local Build
 
 ```bash
-docker run --runtime nvidia -it --network host --privileged \
-  -v /dev:/dev \
-  zed-jetson \
-  ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i
+docker build -f docker/Dockerfile -t zed-jetson .
 ```
 
-`--runtime nvidia` and `--privileged -v /dev:/dev` are required for GPU and camera (USB/CSI)
-access on Jetson.
+### Using Docker Compose
 
-## Adding workspace packages
+```bash
+docker-compose -f docker/docker-compose.yml build
+```
 
-Add new source packages as git submodules under `src/` (see `.gitmodules`) rather than cloning
-them ad hoc — anything under `src/` is picked up automatically by the workspace `colcon build`
-in the final image stage.
+The image must be built for `linux/arm64` on a Jetson (or an arm64 builder) — the base image is
+Jetson-specific and the ZED SDK download is fetched for L4T 36.5.
+
+**Build args** (see `docker/Dockerfile` for defaults):
+- `ROS_PACKAGE` — ROS metapackage (default: `ros_base`)
+- `ROS_VERSION` — ROS distro (default: `jazzy`)
+- `L4T_MAJOR_VERSION`, `L4T_MINOR_VERSION`, `L4T_PATCH_VERSION` — L4T version
+- `ZED_URL` — ZED SDK download URL (can be set via build args or environment)
+
+## Object Detection Demo
+
+The `scripts/object_detection_launch.sh` script sets up and launches the ZED debug node with
+a custom ONNX model for object detection:
+
+```bash
+# Inside the container:
+/scripts/object_detection_launch.sh
+```
+
+This script:
+1. Copies config files from `config/` into the ZED debug package
+2. Updates ONNX model paths to point to `docking.onnx`
+3. Enables object detection service
+4. Launches the debug camera with the custom model
+5. Requires a `colcon build` (or rebuild) of the workspace to pick up the copied config
+
+## Container Runtime Requirements
+
+`--runtime nvidia` — GPU access for CUDA operations
+
+`--privileged -v /dev:/dev` — Camera access (USB/CSI) on Jetson
+
+`--network host` — ROS 2 network communication
+
+Docker Compose handles these automatically via the `docker-compose.yml` configuration.
+
+## Adding Workspace Packages
+
+Add new source packages as git submodules under `src/`:
+
+```bash
+git submodule add <repo-url> src/<package-name>
+```
+
+Anything under `src/` is automatically picked up by the `colcon build` in the Docker build process.

@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  zed-jetson:
+    # Try to pull pre-built image from ghcr.io first, fall back to local build
+    image: ghcr.io/davidnoronha1/zed-jetson:${IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        ROS_PACKAGE: ros_base
+        ROS_VERSION: jazzy
+        L4T_MAJOR_VERSION: 36
+        L4T_MINOR_VERSION: 5
+        L4T_PATCH_VERSION: 0
+        # ZED_URL can be overridden via build args if needed
+
+    # Required for GPU access
+    runtime: nvidia
+
+    # Required for camera access
+    privileged: true
+    network_mode: host
+
+    # Mount host /dev for camera access
+    volumes:
+      - /dev:/dev
+      # Optional: persist ZED SDK cache between runs
+      - zed-cache:/root/.cache/zed
+      # Optional: persist workspace build between runs
+      - ros-workspace:/ros_ws/install
+
+    # Interactive terminal
+    stdin_open: true
+    tty: true
+
+    # Optional: override entrypoint or command
+    # entrypoint: /ros_entrypoint.sh
+    # command: bash
+
+volumes:
+  zed-cache:
+    driver: local
+  ros-workspace:
+    driver: local

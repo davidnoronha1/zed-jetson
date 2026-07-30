@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nlohmann-json3-dev && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ros2_build.sh rosdeps.yml $TMP/
+COPY docker/ros2_build.sh docker/rosdeps.yml $TMP/
 RUN $TMP/ros2_build.sh
 
 #RUN if [ -f $TMP/.ros.build.failed ]; then \
@@ -46,7 +46,7 @@ RUN $TMP/ros2_build.sh
 
 # RUN /tmp/numpy/install.sh && /tmp/cmake/install.sh
 
-COPY ros_entrypoint.sh ros_environment.sh ros2_install.sh /
+COPY docker/ros_entrypoint.sh docker/ros_environment.sh docker/ros2_install.sh /
 
 # ── Stage 2: ZED SDK ─────────────────────────────────────────────────────────
 FROM ros2_build AS final
